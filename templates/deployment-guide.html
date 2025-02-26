@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך להעלאת אתר לגיטהאב, Vercel ו-Netlify</title>
+    <style>
+        :root {
+            --primary-color: #4a69bd;
+            --secondary-color: #6a89cc;
+            --accent-color: #f6b93b;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #78e08f;
+            --github-color: #24292e;
+            --vercel-color: #000000;
+            --netlify-color: #00AD9F;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        
+        nav {
+            background-color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        main {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        section {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        section:last-child {
+            border-bottom: none;
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-right: 4px solid var(--accent-color);
+            padding-right: 10px;
+        }
+        
+        h3 {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin-bottom: 20px;
+            padding-right: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background-color: #f1f1f1;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border-right: 3px solid var(--accent-color);
+        }
+        
+        .code-block {
+            font-family: 'Consolas', 'Courier New', monospace;
+            display: block;
+            white-space: pre;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .platform-card {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .platform-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .platform-icon {
+            flex: 0 0 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+        
+        .github {
+            background-color: var(--github-color);
+        }
+        
+        .vercel {
+            background-color: var(--vercel-color);
+        }
+        
+        .netlify {
+            background-color: var(--netlify-color);
+        }
+        
+        .platform-content {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+        }
+        
+        .platform-content h3 {
+            margin-top: 0;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--dark-color);
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            border-bottom: 3px solid var(--accent-color);
+            color: var(--primary-color);
+        }
+        
+        .tab-button:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .video-container {
+            margin: 30px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .tip-box {
+            background-color: #e3f2fd;
+            border-right: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .tip-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        footer {
+            padding: 20px 0;
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .platform-card {
+                flex-direction: column;
+            }
+            
+            .platform-icon {
+                flex: 0 0 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>מדריך להעלאת אתר לגיטהאב, Vercel ו-Netlify</h1>
+            <p>מדריך מקיף להעלאת אתר פשוט (HTML, CSS, JavaScript) לאינטרנט בקלות</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#intro">מבוא</a></li>
+                <li><a href="#github">גיטהאב</a></li>
+                <li><a href="#vercel">Vercel</a></li>
+                <li><a href="#netlify">Netlify</a></li>
+                <li><a href="#troubleshooting">פתרון בעיות</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <main>
+            <section id="intro">
+                <h2>מבוא לפרסום אתרים</h2>
+                <p>ברוכים הבאים למדריך המקיף להעלאת אתר אינטרנט פשוט לרשת. אם יצרת אתר המבוסס על קבצי HTML, CSS ו-JavaScript, מדריך זה יסביר לך את הדרכים הפשוטות והחינמיות להפוך את האתר שלך לנגיש לכל העולם.</p>
+                
+                <div class="image-container">
+                    <img src="/api/placeholder/800/400" alt="תהליך העלאת אתר - תרשים כללי" />
+                </div>
+                
+                <p>נעבור על שלושה שלבים עיקריים:</p>
+                <ol>
+                    <li><strong>העלאת קוד האתר ל-GitHub</strong> - מאפשר לנהל את הקוד, לשתף אותו ולעקוב אחר שינויים</li>
+                    <li><strong>הגדרת Vercel או Netlify</strong> - שירותי אחסון חינמיים המתחברים ישירות ל-GitHub</li>
+                    <li><strong>פרסום האתר</strong> - הגדרות אחרונות וקבלת כתובת לאתר שלך</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h3>לפני שמתחילים</h3>
+                    <p>ודא שיש לך את הקבצים הבאים מוכנים:</p>
+                    <ul>
+                        <li>קובץ <code>index.html</code> שהוא דף הבית של האתר</li>
+                        <li>קובץ <code>style.css</code> או תיקיית <code>css</code> עם קבצי עיצוב</li>
+                        <li>קובץ <code>script.js</code> או תיקיית <code>js</code> עם קבצי JavaScript</li>
+                        <li>חשבון GitHub קיים (אם אין לך, <a href="https://github.com/join" target="_blank">הירשם כאן</a>)</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="github">
+                <h2>העלאת האתר לגיטהאב (GitHub)</h2>
+                
+                <div class="platform-card">
+                    <div class="platform-icon github">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                    </div>
+                    <div class="platform-content">
+                        <h3>GitHub - מערכת לניהול קוד</h3>
+                        <p>GitHub היא פלטפורמה לאחסון, ניהול וגיבוי קוד. לפני שנוכל להשתמש ב-Vercel או Netlify, עלינו להעלות את האתר שלנו לגיטהאב כמאגר (repository).</p>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-button active" onclick="openTab(event, 'github-manual')">העלאה ידנית</button>
+                    <button class="tab-button" onclick="openTab(event, 'github-cli')">העלאה באמצעות CLI</button>
+                </div>
+                
+                <div id="github-manual" class="tab-content active">
+                    <h3>העלאה ידנית (באמצעות ממשק האתר)</h3>
+                    
+                    <ol>
+                        <li>
+                            <strong>התחבר לחשבון GitHub שלך</strong> בכתובת <a href="https://github.com" target="_blank">github.com</a>
+                        </li>
+                        <li>
+                            <strong>צור מאגר חדש</strong> על ידי לחיצה על כפתור "+" בפינה הימנית העליונה ובחירה ב-"New repository"
+                            <div class="image-container">
+                                <img src="/api/placeholder/600/300" alt="יצירת מאגר חדש בגיטהאב" />
+                            </div>
+                        </li>
+                        <li>
+                            <strong>הגדר את המאגר:</strong>
+                            <ul>
+                                <li>הזן שם למאגר (לדוגמה: <code>my-website</code>)</li>
+                                <li>אופציונלי: הוסף תיאור קצר</li>
+                                <li>בחר בהגדרה "Public" (אם אתה רוצה שהקוד יהיה נגיש לכולם) או "Private" (אם אתה רוצה להגביל גישה)</li>
+                                <li>סמן את האפשרות "Add a README file" כדי ליצור קובץ README בסיסי</li>
+                                <li>לחץ על כפתור "Create repository"</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>העלאת קבצים:</strong>
+                            <ul>
+                                <li>בדף המאגר החדש, לחץ על כפתור "Add file" ובחר ב-"Upload files"</li>
+                                <li>גרור את כל קבצי האתר שלך לאזור ההעלאה או בחר אותם באמצעות כפתור "choose your files"</li>
+                                <li>הוסף הודעת commit כמו "העלאה ראשונית של קבצי האתר"</li>
+                                <li>לחץ על כפתור "Commit changes"</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <div class="tip-box">
+                        <h4>טיפ!</h4>
+                        <p>ודא שקובץ <code>index.html</code> נמצא בתיקייה הראשית של המאגר. זהו הקובץ שיוצג כדף הבית של האתר שלך.</p>
+                    </div>
+                </div>
+                
+                <div id="github-cli" class="tab-content">
+                    <h3>העלאה באמצעות ממשק שורת הפקודה (CLI)</h3>
+                    
+                    <p>אם אתה מעדיף לעבוד עם שורת הפקודה, הנה השלבים להעלאת האתר באמצעות Git:</p>
+                    
+                    <ol>
+                        <li>
+                            <strong>התקן את Git</strong> אם עדיין לא התקנת:
+                            <ul>
+                                <li>Windows: הורד והתקן מ<a href="https://git-scm.com/download/win" target="_blank">האתר הרשמי</a></li>
+                                <li>Mac: הרץ <code>brew install git</code> (אם יש לך Homebrew) או התקן מ<a href="https://git-scm.com/download/mac" target="_blank">האתר הרשמי</a></li>
+                                <li>Linux: הרץ <code>sudo apt-get install git</code> (Ubuntu/Debian) או <code>sudo yum install git</code> (Fedora/CentOS)</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>צור מאגר חדש ב-GitHub</strong> דרך האתר (כמו בשיטה הידנית, אבל אל תסמן "Add a README file")
+                        </li>
+                        <li>
+                            <strong>הגדר את Git:</strong>
+                            <pre><code class="code-block">git config --global user.name "השם שלך"
+git config --global user.email "האימייל שלך"</code></pre>
+                        </li>
+                        <li>
+                            <strong>פתח את שורת הפקודה (Terminal/CMD):</strong>
+                            <ul>
+                                <li>נווט לתיקייה שבה נמצאים קבצי האתר שלך: <code>cd path/to/your/website</code></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>אתחל את המאגר המקומי והעלה את הקבצים:</strong>
+                            <pre><code class="code-block">git init
+git add .
+git commit -m "העלאה ראשונית של האתר"
+git branch -M main
+git remote add origin https://github.com/username/repository-name.git
+git push -u origin main</code></pre>
+                            <p>(החלף <code>username</code> ו-<code>repository-name</code> בשם המשתמש שלך ושם המאגר)</p>
+                        </li>
+                    </ol>
+                    
+                    <div class="tip-box">
+                        <h4>הערה לגבי אימות:</h4>
+                        <p>גיטהאב כבר לא תומכת באימות באמצעות סיסמה רגילה. השתמש באחת משתי האפשרויות:</p>
+                        <ol>
+                            <li>צור <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> והשתמש בו במקום הסיסמה</li>
+                            <li>הגדר SSH Key (מומלץ לשימוש קבוע) - <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh" target="_blank">מדריך מפורט</a></li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <h3>סרטון הדרכה להעלאת אתר לגיטהאב</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/p1QU3kLFPdg" allowfullscreen></iframe>
+                </div>
+            </section>
+            
+            <section id="vercel">
+                <h2>פרסום האתר ב-Vercel</h2>
+                
+                <div class="platform-card">
+                    <div class="platform-icon vercel">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0L24 24H0L12 0Z" />
+                        </svg>
+                    </div>
+                    <div class="platform-content">
+                        <h3>Vercel - פלטפורמת אחסון וניהול</h3>
+                        <p>Vercel היא פלטפורמה מצוינת לפרסום אתרים סטטיים ודינמיים. היא מציעה חיבור קל ומהיר לגיטהאב, פריסה אוטומטית וחבילה חינמית נדיבה.</p>
+                    </div>
+                </div>
+                
+                <h3>פרסום אתר מגיטהאב ל-Vercel</h3>
+                
+                <ol>
+                    <li>
+                        <strong>הירשם ל-Vercel:</strong>
+                        <ul>
+                            <li>גש לאתר <a href="https://vercel.com" target="_blank">Vercel.com</a></li>
+                            <li>לחץ על "Sign Up"</li>
+                            <li>בחר באפשרות "Continue with GitHub" כדי להתחבר באמצעות חשבון גיטהאב שלך</li>
+                            <li>אשר את ההרשאות הנדרשות</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>יצירת פרויקט חדש:</strong>
+                        <ul>
+                            <li>לאחר ההרשמה, לחץ על כפתור "New Project"</li>
+                            <li>בחר את המאגר של האתר שלך מרשימת המאגרים בגיטהאב</li>
+                            <li>אם אינך רואה את המאגר, ייתכן שתצטרך ללחוץ על "Adjust GitHub App Permissions" כדי לתת ל-Vercel גישה למאגר הספציפי</li>
+                        </ul>
+                        <div class="image-container">
+                            <img src="/api/placeholder/600/300" alt="יצירת פרויקט חדש ב-Vercel" />
+                        </div>
+                    </li>
+                    <li>
+                        <strong>הגדר את הפרויקט:</strong>
+                        <ul>
+                            <li>שם פרויקט: הוא מוגדר אוטומטית אך ניתן לשנותו</li>
+                            <li>Framework Preset: אם אתה משתמש ב-HTML, CSS ו-JS בלבד, בחר ב-"Other" או השאר את ברירת המחדל</li>
+                            <li>Root Directory: השאר ריק אם הקבצים נמצאים בתיקייה הראשית</li>
+                            <li>Build Command: השאר ריק אם אין צורך בפקודת בנייה</li>
+                            <li>Output Directory: השאר ריק אם אתה רוצה לפרסם את התיקייה הראשית</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>פרסום האתר:</strong>
+                        <ul>
+                            <li>לחץ על כפתור "Deploy"</li>
+                            <li>המתן עד שתהליך הפריסה יושלם</li>
+                            <li>לאחר סיום, תקבל הודעה "Your project has been successfully deployed" עם קישור לאתר החדש שלך</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h4>יתרונות השימוש ב-Vercel:</h4>
+                    <ul>
+                        <li><strong>פריסה אוטומטית:</strong> כל שינוי שתדחוף למאגר בגיטהאב יגרום אוטומטית לעדכון האתר</li>
+                        <li><strong>סביבות תצוגה מקדימה:</strong> Vercel יוצרת אוטומטית סביבת תצוגה מקדימה לכל Pull Request</li>
+                        <li><strong>SSL בחינם:</strong> כל האתרים בפלטפורמה מקבלים אוטומטית תעודת SSL (HTTPS)</li>
+                        <li><strong>דומיין מותאם אישית:</strong> תוכל לקשר דומיין משלך (אם יש לך) בקלות</li>
+                    </ul>
+                </div>
+                
+                <h3>סרטון הדרכה - פרסום אתר ב-Vercel</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/V8GVKaVMck4" allowfullscreen></iframe>
+                </div>
+            </section>
+            
+            <section id="netlify">
+                <h2>פרסום האתר ב-Netlify</h2>
+                
+                <div class="platform-card">
+                    <div class="platform-icon netlify">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16.9044 8.4498l-0.2225 0.3358c-0.1357 0.1617-0.1897 0.3621-0.1413 0.5624 0.0226 0.1106 0.0678 0.2168 0.1228 0.3138l0.0678 0.1258-3.3478 3.3464c-0.0452 0.0452-0.0904 0.0904-0.1272 0.1356-0.0106 0.0131-0.0172 0.0292-0.0238 0.0452-0.0066 0.016-0.0131 0.0319-0.0196 0.0464v-0.005l-2.1255-2.1293c-0.0452-0.0452-0.0904-0.0983-0.1357-0.1435-0.0226-0.0226-0.0339-0.0452-0.0339-0.0678 0-0.0226 0.0113-0.0452 0.0339-0.0678l0.6737-0.6708-0.2546-0.2564-0.1591-0.1578-0.0113-0.0113-0.6576 0.6616c-0.1922 0.1929-0.1922 0.5059 0 0.6988l0.2999 0.3016c0.361 0.3551 0.9499 0.9329 1.2498 1.2498l0.7546 0.752c0.2395-0.155 0.5011-0.2999 0.7641-0.4448 1.2385-0.678 2.5565-1.2271 3.9139-1.6171 0.1018-0.0332 0.1915
