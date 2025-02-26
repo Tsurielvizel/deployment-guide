@@ -1,2 +1,2 @@
 # deployment-guide
-how to deploy html sites to vercel and netfily with github
+How to deploy html sites(with 3 files html,css,js) to vercel and netfily with github.
